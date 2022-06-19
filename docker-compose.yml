@@ -1,0 +1,39 @@
+services:
+  database:
+    image: rockylinux-postgres:1.0
+    build:
+      context: builds/database/
+      dockerfile: Dockerfile
+    volumes:
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
+    networks:
+      - portfolio-network
+
+  cache:
+    image: rockylinux-redis:1.0
+    build:
+      context: builds/cache/
+      dockerfile: Dockerfile
+    volumes:
+      - type: volume
+        source: redis-data
+        target: /var/lib/redis/
+    networks:
+      - portfolio-network
+
+  web-server:
+    image: rockylinux-nginx:1.0
+    build:
+      context: builds/web-server/
+      dockerfile: Dockerfile
+    networks:
+      - portfolio-network
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  portfolio-network: {}
